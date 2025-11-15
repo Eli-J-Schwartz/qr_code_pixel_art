@@ -13,7 +13,7 @@ function generate() {
     console.log(code);
 
     arr = createConstantPatterns();
-    placePixels(code, arr);
+    placePixels(code, arr, 0);
 
     drawPixels(arr, 41);
 
@@ -161,7 +161,18 @@ function isReservedPixel(x, y) {
     return false;
 }
 
-function placePixels(codewords, qrArr) {
+function evalMask(x, y, m) {
+    if (m == 0) return (x + y) % 2 == 0;
+    if (m == 1) return y % 2 == 0;
+    if (m == 2) return x % 3 == 0;
+    if (m == 3) return (x + y) % 3 == 0;
+    if (m == 4) return (Math.floor(x/3) + Math.floor(y/3)) % 2 == 0;
+    if (m == 5) return x*y%2 + x*y%3 == 0;
+    if (m == 6) return ((x*y)%3 + x*y)%2 == 0;
+    if (m == 7) return ((x*y)%3 + x+y)%2 == 0;
+}
+
+function placePixels(codewords, qrArr, mask) {
     var x = 40;
     var y = 40;
 
@@ -171,6 +182,7 @@ function placePixels(codewords, qrArr) {
     for (var i = 0; i < 43*4*8; ) {
         if (!isReservedPixel(x, y)) {
             qrArr[y*41+x] = 1-getBit(codewords, i);
+            if (evalMask(x, y, mask)) qrArr[y*41+x] = 1 - qrArr[y*41+x];
             console.log(x, y, getBit(codewords, i));
             i++;
         }
