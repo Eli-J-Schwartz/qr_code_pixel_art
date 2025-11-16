@@ -1,5 +1,5 @@
-width = 25
-height = 25
+width = 19
+height = 19
 
 createPixelGrid(width, height);
 
@@ -49,12 +49,21 @@ function createPixelGrid(w, h) {
 }
 
 function setDimensions() {
+    if (width == document.getElementById("widthPicker").value && height == document.getElementById("heightPicker").value) return;
+
     width = document.getElementById("widthPicker").value;
     height = document.getElementById("heightPicker").value;
     createPixelGrid(width, height);
 }
 
 function generate() {
+    if (document.getElementById("inputText").value.length > 58) {
+        document.getElementById("lengthError").style.display = "block";
+        document.getElementById("lengthError").textContent = "Input must be less than 59 characters. You have " + document.getElementById("inputText").value.length + " characters."
+        return;
+    }
+    document.getElementById("lengthError").style.display = "none";
+
     code = generateCodewords(formatText(document.getElementById("inputText").value))
 
     console.log(code);
