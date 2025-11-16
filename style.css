@@ -96,3 +96,18 @@ button:hover {
     background: #fafafa;
     padding: 10px;
 }
+
+.button {
+    padding: 12px;
+    background: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.button:hover {
+    background: #004ecc;
+}

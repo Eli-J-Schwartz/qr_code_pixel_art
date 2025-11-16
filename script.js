@@ -373,5 +373,8 @@ function drawPixels(pixels, width) {
     var img = new Image();
 
     img.src = canvas.toDataURL('image/svg');
+    document.getElementById("downloadButton").href = img.src;
+    document.getElementById("downloadButton").download = "pixelArtQRCode" + Date.now();
+    document.getElementById("downloadButton").style.display = "block";
     document.getElementById("qrCodeOutput").src = img.src;
 }
