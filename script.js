@@ -59,13 +59,27 @@ function generate() {
 
     console.log(code);
 
+    best_mask = 0;
+    best_diff = 9999999;
+    for (var mask = 0; mask < 8; mask++) {
+        arr = createConstantPatterns();
+        placePixels(code, arr, mask);
+
+        placeFormat(arr, mask);
+
+        diff = replaceArt(arr, pixel_table, width, height);
+        if (diff < best_diff) {
+            best_mask = mask;
+            best_diff = diff;
+        }
+    }
+
+    console.log(best_mask)
+
     arr = createConstantPatterns();
-    placePixels(code, arr, 1);
-
-    placeFormat(arr, 1);
-
+    placePixels(code, arr, best_mask);
+    placeFormat(arr, best_mask); 
     replaceArt(arr, pixel_table, width, height);
-
     drawPixels(arr, 41);
 
 }
