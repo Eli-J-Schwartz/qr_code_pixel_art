@@ -2,6 +2,7 @@ width = 17
 height = 17
 drawing=false
 colorWhite=false
+buttonArray=[]
 
 whitebutton=document.querySelector(".whitebutton")
 blackbutton=document.querySelector(".blackbutton")
@@ -16,6 +17,19 @@ blackbutton.addEventListener("click",()=>{
     whitebutton.style.borderColor="black"
 })
 
+document.querySelector(".reset").addEventListener("click",()=>{
+    buttonArray.forEach((button)=>{
+                    if (!colorWhite) {
+                        button.style.background = "white";
+                        button.old_back = "white";
+                        pixel_table[button.id] = 0;
+                    } else {
+                        button.style.background = "black";
+                        button.old_back = "black";
+                        pixel_table[button.id] = 1;
+                    }
+    })
+})
 
 createPixelGrid(width, height);
 
@@ -32,6 +46,7 @@ function createPixelGrid(w, h) {
         var line = document.createElement("tr");
         for (var x = 0; x < w; x++) {
             var button = document.createElement("button");
+            buttonArray.push(button)
             button.addEventListener('mousedown',
                 (event) => {
                     drawing=true
