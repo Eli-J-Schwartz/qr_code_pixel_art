@@ -9,12 +9,16 @@ blackbutton=document.querySelector(".blackbutton")
 whitebutton.addEventListener("click",()=>{
     colorWhite=false
     whitebutton.style.borderColor="#004ecc"
+    whitebutton.style.borderWidth="medium"
     blackbutton.style.borderColor="black"
+    blackbutton.style.borderWidth="thin"
 })
 blackbutton.addEventListener("click",()=>{
     colorWhite=true
     blackbutton.style.borderColor="#004ecc"
+    blackbutton.style.borderWidth="medium"
     whitebutton.style.borderColor="black"
+    whitebutton.style.borderWidth="thin"
 })
 
 document.querySelector(".reset").addEventListener("click",()=>{
