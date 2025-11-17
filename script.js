@@ -1,7 +1,27 @@
 width = 17
 height = 17
-//test to see if i can make a new branch
+drawing=false
+colorWhite=false
+
+whitebutton=document.querySelector(".whitebutton")
+blackbutton=document.querySelector(".blackbutton")
+whitebutton.addEventListener("click",()=>{
+    colorWhite=false
+    whitebutton.style.borderColor="#004ecc"
+    blackbutton.style.borderColor="black"
+})
+blackbutton.addEventListener("click",()=>{
+    colorWhite=true
+    blackbutton.style.borderColor="#004ecc"
+    whitebutton.style.borderColor="black"
+})
+
+
 createPixelGrid(width, height);
+
+document.body.addEventListener("mouseup",()=>{
+    drawing=false
+})
 
 function createPixelGrid(w, h) {
     table = document.getElementById("pixel-table");
@@ -12,10 +32,11 @@ function createPixelGrid(w, h) {
         var line = document.createElement("tr");
         for (var x = 0; x < w; x++) {
             var button = document.createElement("button");
-            button.addEventListener('click',
+            button.addEventListener('mousedown',
                 (event) => {
-                    console.log(event);
-                    if (event.target.old_back == "black") {
+                    drawing=true
+                       console.log(event);
+                    if (!colorWhite) {
                         event.target.style.background = "white";
                         event.target.old_back = "white";
                         pixel_table[event.target.id] = 0;
@@ -29,6 +50,19 @@ function createPixelGrid(w, h) {
                 (event) => {
                     event.target.old_back = event.target.style.background;
                     event.target.style.background = 'grey';
+
+                    if(drawing){
+                        console.log(event);
+                    if (!colorWhite) {
+                        event.target.style.background = "white";
+                        event.target.old_back = "white";
+                        pixel_table[event.target.id] = 0;
+                    } else {
+                        event.target.style.background = "black";
+                        event.target.old_back = "black";
+                        pixel_table[event.target.id] = 1;
+                    }
+                    }
                 });
             button.addEventListener('mouseout', 
                 (event) => {
