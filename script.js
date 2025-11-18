@@ -1,24 +1,16 @@
 width = 17
 height = 17
 drawing=false
-colorWhite=false
+colorBlack=false
 buttonArray=[]
 
 whitebutton=document.querySelector(".whitebutton")
 blackbutton=document.querySelector(".blackbutton")
 whitebutton.addEventListener("click",()=>{
-    colorWhite=false
-    whitebutton.style.borderColor="#004ecc"
-    whitebutton.style.borderWidth="medium"
-    blackbutton.style.borderColor="black"
-    blackbutton.style.borderWidth="thin"
+    setColor(false)
 })
 blackbutton.addEventListener("click",()=>{
-    colorWhite=true
-    blackbutton.style.borderColor="#004ecc"
-    blackbutton.style.borderWidth="medium"
-    whitebutton.style.borderColor="black"
-    whitebutton.style.borderWidth="thin"
+    setColor(true)
 })
 
 document.querySelector(".reset").addEventListener("click",()=>{
@@ -27,13 +19,43 @@ document.querySelector(".reset").addEventListener("click",()=>{
     })
 })
 
-createPixelGrid(width, height);
+document.addEventListener("keypress",(e)=>{
+    if(e.key=="w"){
+        setColor(false)
+    }
+    else if(e.key=="b"){
+        setColor(true)
+    }
+    else if(e.key="space"){
+        setColor(!colorBlack)
+    }
+})
 
 document.body.addEventListener("mouseup",()=>{
     drawing=false
 })
+
+createPixelGrid(width, height);
+
+
+function setColor(value){
+    if(value){
+        colorBlack=true
+        blackbutton.style.borderColor="#004ecc"
+        whitebutton.style.borderColor="black"
+        blackbutton.style.borderWidth="medium"
+        whitebutton.style.borderWidth="thin"
+        
+    }else{
+        colorBlack=false
+        whitebutton.style.borderColor="#004ecc"
+        blackbutton.style.borderColor="black"
+        whitebutton.style.borderWidth="medium"
+        blackbutton.style.borderWidth="thin"
+    }
+}
 function changeColor(button){
-    if (!colorWhite) {
+    if (!colorBlack) {
         button.style.background = "white";
         button.old_back = "white";
         pixel_table[button.id] = 0;
