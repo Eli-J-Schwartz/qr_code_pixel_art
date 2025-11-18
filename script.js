@@ -4,8 +4,8 @@ drawing=false
 colorBlack=false
 buttonArray=[]
 
-whitebutton=document.querySelector(".whitebutton")
-blackbutton=document.querySelector(".blackbutton")
+whitebutton=document.body.querySelector(".whitebutton")
+blackbutton=document.body.querySelector(".blackbutton")
 whitebutton.addEventListener("click",()=>{
     setColor(false)
 })
@@ -13,13 +13,14 @@ blackbutton.addEventListener("click",()=>{
     setColor(true)
 })
 
-document.querySelector(".reset").addEventListener("click",()=>{
+document.body.querySelector(".reset").addEventListener("click",()=>{
     buttonArray.forEach((button)=>{
         changeColor(button)      
     })
 })
 
 document.body.addEventListener("keydown",(e)=>{
+    if(!e.repeat){
     if(e.key=="w"){
         setColor(false)
     }
@@ -28,7 +29,9 @@ document.body.addEventListener("keydown",(e)=>{
     }
     else if(e.key==" "){
         setColor(!colorBlack)
+        e.preventDefault()
     }
+}
 })
 
 document.body.addEventListener("mouseup",()=>{
@@ -39,6 +42,7 @@ createPixelGrid(width, height);
 
 
 function setColor(value){
+    console.log(value)
     if(value){
         colorBlack=true
         blackbutton.style.borderColor="#004ecc"
