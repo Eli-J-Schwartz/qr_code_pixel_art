@@ -19,14 +19,14 @@ document.querySelector(".reset").addEventListener("click",()=>{
     })
 })
 
-document.addEventListener("keypress",(e)=>{
+document.body.addEventListener("keydown",(e)=>{
     if(e.key=="w"){
         setColor(false)
     }
     else if(e.key=="b"){
         setColor(true)
     }
-    else if(e.key="space"){
+    else if(e.key==" "){
         setColor(!colorBlack)
     }
 })
