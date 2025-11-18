@@ -43,10 +43,15 @@ function setColor(value){
         colorBlack=true
         blackbutton.style.borderColor="#004ecc"
         whitebutton.style.borderColor="black"
+        blackbutton.style.borderWidth="medium"
+        whitebutton.style.borderWidth="thin"
+        
     }else{
         colorBlack=false
         whitebutton.style.borderColor="#004ecc"
         blackbutton.style.borderColor="black"
+        whitebutton.style.borderWidth="medium"
+        blackbutton.style.borderWidth="thin"
     }
 }
 function changeColor(button){
