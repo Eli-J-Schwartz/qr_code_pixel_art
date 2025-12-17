@@ -21,13 +21,7 @@ document.body.querySelector(".reset").addEventListener("click",()=>{
 
 document.body.addEventListener("keydown",(e)=>{
     if(!e.repeat){
-    if(e.key=="w"){
-        setColor(false)
-    }
-    else if(e.key=="b"){
-        setColor(true)
-    }
-    else if(e.key==" "){
+     if(e.key==" "){
         setColor(!colorBlack)
         e.preventDefault()
     }
