@@ -15,7 +15,13 @@ blackbutton.addEventListener("click",()=>{
 
 document.body.querySelector(".reset").addEventListener("click",()=>{
     buttonArray.forEach((button)=>{
-        changeColor(button)      
+        changeColor(button)
+    })
+})
+
+document.body.querySelector(".invert").addEventListener("click",()=>{
+    buttonArray.forEach((button)=>{
+        invertColor(button)
     })
 })
 
@@ -36,14 +42,13 @@ createPixelGrid(width, height);
 
 
 function setColor(value){
-    console.log(value)
     if(value){
         colorBlack=true
         blackbutton.style.borderColor="#004ecc"
         whitebutton.style.borderColor="black"
         blackbutton.style.borderWidth="medium"
         whitebutton.style.borderWidth="thin"
-        
+
     }else{
         colorBlack=false
         whitebutton.style.borderColor="#004ecc"
@@ -63,6 +68,16 @@ function changeColor(button){
         pixel_table[button.id] = 1;
     }
 }
+function invertColor(button){
+    pixel_table[button.id] = 1 - pixel_table[button.id];
+    if (pixel_table[button.id]) {
+        button.style.background = "black";
+        button.old_back = "black";
+    } else {
+        button.style.background = "white";
+        button.old_back = "white";
+    }
+}
 
 function createPixelGrid(w, h) {
     buttonArray=[]
@@ -79,20 +94,20 @@ function createPixelGrid(w, h) {
                 (event) => {
                     drawing=true
                        console.log(event);
-                        changeColor(event.target)      
+                        changeColor(event.target)
 
                 });
-            button.addEventListener('mouseover', 
+            button.addEventListener('mouseover',
                 (event) => {
                     event.target.old_back = event.target.style.background;
                     event.target.style.background = 'grey';
 
                     if(drawing){
                         console.log(event);
-                        changeColor(event.target)      
+                        changeColor(event.target)
                     }
                 });
-            button.addEventListener('mouseout', 
+            button.addEventListener('mouseout',
                 (event) => {
                     event.target.style.backgroundColor = event.target.old_back;
                 });
@@ -156,10 +171,14 @@ function generate() {
 
     arr = createConstantPatterns();
     placePixels(code, arr, best_mask);
-    placeFormat(arr, best_mask); 
+    placeFormat(arr, best_mask);
     replaceArt(arr, pixel_table, width, height);
     drawPixels(arr, 41);
 
+    document.getElementById("qrCodeOutput").scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
 }
 
 function createConstantPatterns() {
@@ -321,7 +340,7 @@ function placePixels(codewords, qrArr, mask) {
 
     var going_up = true;
     var about_to_change_y = false;
-    
+
     for (var i = 0; i < 43*4*8; ) {
         if (!isReservedPixel(x, y)) {
             qrArr[y*41+x] = 1-getBit(codewords, i);
