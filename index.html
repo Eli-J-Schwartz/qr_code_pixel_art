@@ -36,9 +36,13 @@
             <p id="sizeError" style="color: red; display: none;"></p>
             <br/>
             <br/>
-            <table align="center" id="pixel-table" cellspacing="0">
-                
-            </table>
+            <table align="center" id="pixel-table" cellspacing="0"></table>
+            <br/>
+            <div class="portContainer">
+                <input type="file" id="import" accept=".bmp" style="display: none;">
+                <button onclick="document.getElementById('import').click()">Import</button>
+                <button onclick="exportToBMP()">Export</button>
+            </div>
         </div>
 
         <div class="output">
