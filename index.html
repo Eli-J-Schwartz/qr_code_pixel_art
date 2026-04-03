@@ -31,20 +31,27 @@
                 <p class="colortext">Color:</p>
                 <button class="color whitebutton"></button> <button class="color blackbutton"></button>
                 <button class="reset">Set All</button>
+		<button class="invert">Invert All</button>
             </div>
             <p id="sizeError" style="color: red; display: none;"></p>
             <br/>
             <br/>
-            <table align="center" id="pixel-table" cellspacing="0">
-                
-            </table>
+            <table align="center" id="pixel-table" cellspacing="0"></table>
+            <br/>
+            <div class="portContainer">
+                <input type="file" id="import" accept=".bmp" style="display: none;">
+                <button onclick="document.getElementById('import').click()">Import</button>
+                <button onclick="exportToBMP()">Export</button>
+            </div>
         </div>
 
         <div class="output">
-            <img id="qrCodeOutput" alt="QR Code will appear here">
+            <img id="qrCodeOutput" alt="QR Code with pixel art">
             <br/>
             <br/>
             <a href="" download="pixelArtQRCode" id="downloadButton" style="display: none;" class="button">Download</a>
+            <br/>
+            <em style="color: red;">Make sure to test that any output scans correctly!<br/>This generator can produce fragile QR codes.</em>
         </div>
     </div>
 </body>

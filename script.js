@@ -15,7 +15,13 @@ blackbutton.addEventListener("click",()=>{
 
 document.body.querySelector(".reset").addEventListener("click",()=>{
     buttonArray.forEach((button)=>{
-        changeColor(button)      
+        changeColor(button, colorBlack)
+    })
+})
+
+document.body.querySelector(".invert").addEventListener("click",()=>{
+    buttonArray.forEach((button)=>{
+        changeColor(button, 1 - pixel_table[button.id])
     })
 })
 
@@ -34,16 +40,17 @@ document.body.addEventListener("mouseup",()=>{
 
 createPixelGrid(width, height);
 
+document.getElementById("import").addEventListener("change", importFromBMP);
+
 
 function setColor(value){
-    console.log(value)
     if(value){
         colorBlack=true
         blackbutton.style.borderColor="#004ecc"
         whitebutton.style.borderColor="black"
         blackbutton.style.borderWidth="medium"
         whitebutton.style.borderWidth="thin"
-        
+
     }else{
         colorBlack=false
         whitebutton.style.borderColor="#004ecc"
@@ -52,8 +59,8 @@ function setColor(value){
         blackbutton.style.borderWidth="thin"
     }
 }
-function changeColor(button){
-    if (!colorBlack) {
+function changeColor(button, value){
+    if (!value) {
         button.style.background = "white";
         button.old_back = "white";
         pixel_table[button.id] = 0;
@@ -79,20 +86,20 @@ function createPixelGrid(w, h) {
                 (event) => {
                     drawing=true
                        console.log(event);
-                        changeColor(event.target)      
+                        changeColor(event.target, colorBlack)
 
                 });
-            button.addEventListener('mouseover', 
+            button.addEventListener('mouseover',
                 (event) => {
                     event.target.old_back = event.target.style.background;
                     event.target.style.background = 'grey';
 
                     if(drawing){
                         console.log(event);
-                        changeColor(event.target)      
+                        changeColor(event.target, colorBlack)
                     }
                 });
-            button.addEventListener('mouseout', 
+            button.addEventListener('mouseout',
                 (event) => {
                     event.target.style.backgroundColor = event.target.old_back;
                 });
@@ -156,10 +163,14 @@ function generate() {
 
     arr = createConstantPatterns();
     placePixels(code, arr, best_mask);
-    placeFormat(arr, best_mask); 
+    placeFormat(arr, best_mask);
     replaceArt(arr, pixel_table, width, height);
     drawPixels(arr, 41);
 
+    document.getElementById("qrCodeOutput").scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
 }
 
 function createConstantPatterns() {
@@ -321,7 +332,7 @@ function placePixels(codewords, qrArr, mask) {
 
     var going_up = true;
     var about_to_change_y = false;
-    
+
     for (var i = 0; i < 43*4*8; ) {
         if (!isReservedPixel(x, y)) {
             qrArr[y*41+x] = 1-getBit(codewords, i);
@@ -439,4 +450,66 @@ function drawPixels(pixels, width) {
     document.getElementById("downloadButton").download = "pixelArtQRCode" + Date.now();
     document.getElementById("downloadButton").style.display = "block";
     document.getElementById("qrCodeOutput").src = img.src;
+}
+
+async function importFromBMP(event) {
+    var file = event.target.files[0];
+    if (!file) return;
+    var buffer = await file.arrayBuffer();
+    var view = new DataView(buffer);
+
+    if (view.getUint16(0, true) != 0x4D42) {
+        alert("Not a valid BMP file");
+        return;
+    }
+
+    width = view.getUint32(18, true);
+    height = Math.abs(view.getInt32(22, true));
+    createPixelGrid(width, height);
+
+    var rowSize = Math.floor((1 * width + 31) / 32) * 4;
+    var offset = view.getUint32(10, true);
+
+    for (let y = height - 1; y >= 0; --y) {
+        for (let x = 0; x < width; ++x)
+            changeColor(buttonArray[y * width + x], 1 - ((view.getUint8(offset + Math.floor(x / 8)) >> (7 - (x % 8))) & 1));
+        offset += rowSize;
+    }
+
+    event.target.value = '';
+}
+
+function exportToBMP() {
+    var rowSize = Math.floor((1 * width + 31) / 32) * 4;
+    var fileSize = 54 + 8 + rowSize * height;
+    var buffer = new ArrayBuffer(fileSize);
+    var view = new DataView(buffer);
+
+    view.setUint16(0, 0x4D42, true);
+    view.setUint32(2, fileSize, true);
+    view.setUint32(10, 62, true);
+    view.setUint32(14, 40, true);
+    view.setUint32(18, width, true);
+    view.setUint32(22, height, true);
+    view.setUint16(26, 1, true);
+    view.setUint16(28, 1, true);
+    view.setUint32(34, rowSize * height, true);
+    view.setUint32(54, 0x00000000, true);
+    view.setUint32(58, 0x00FFFFFF, true);
+
+    let offset = 62;
+    for (let y = height - 1; y >= 0; --y) {
+        for (let x = 0; x < width; ++x) {
+            if (pixel_table[y * width + x] == 0) {
+                var byteOffset = offset + Math.floor(x / 8);
+                view.setUint8(byteOffset, view.getUint8(byteOffset) | (1 << (7 - (x % 8))));
+            }
+        }
+        offset += rowSize;
+    }
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([buffer], {type: "image/bmp"}));
+    link.download = "pattern.bmp";
+    link.click();
 }

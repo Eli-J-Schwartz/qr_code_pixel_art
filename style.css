@@ -5,6 +5,9 @@ img {
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
+img:not([src]) {
+    visibility: hidden;
+}
 
 body {
     margin: 0;
@@ -116,10 +119,7 @@ button:hover {
     margin-top:10px;
     height:20px;
     width:20px;
-    font-size:10px;
-    text-align: center;
     border:2px solid black
-
 }
 
 .whitebutton{
@@ -145,7 +145,7 @@ button:hover {
     align-items:center;
     justify-content: center;
 }
-.reset{
+.reset, .invert{
     margin-top:10px;
     height:30px;
     text-align: center;
